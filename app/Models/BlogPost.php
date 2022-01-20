@@ -14,7 +14,7 @@ class BlogPost extends Model
         'content'
     ];
 
-    public function comments(){
+    public function comment(){
         return $this->hasMany('Comment');
     }
 

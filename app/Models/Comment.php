@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Comment extends Model
 {
     use HasFactory;
-    public function blogPosts(){
+    // blogPost will convert to blog_post
+    public function blogPost(){
         return $this->belongsTo('BlogPost');
     }
 }
