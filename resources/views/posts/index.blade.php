@@ -13,6 +13,11 @@
         @foreach($posts as $post)
 
             <h1 class="mt-2"><a href="{{ route('posts.show', ['post' => $post->id]) }}">{{ $post['title'] }}</a></h1>
+            @if ($post->comment_count)
+                <p>{{ $post->comment_count }} comments</p>
+            @else
+                <p>No comment yet</p>
+            @endif
             <div class="form-inline">
                 <a href="{{ route('posts.edit', ['post' => $post->id]) }}" class="btn btn-primary mr-1">Edit</a>
                 <form action="{{ route('posts.destroy', ['post' => $post->id]) }}" method="post">

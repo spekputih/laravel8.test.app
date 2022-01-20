@@ -5,14 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\BlogPost;
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePost;
+// use Illuminate\Support\Facades\DB;
 
 class BlogController extends Controller
 {
     
     public function index()
     {
-        $posts = BlogPost::all();
-        return view('posts.index', ['posts' => $posts]);
+        return view('posts.index', [
+            'posts' => BlogPost::withCount('comment')->get()
+        ]);
     }
 
     
