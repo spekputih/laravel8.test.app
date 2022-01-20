@@ -26,6 +26,7 @@ class PostTest extends TestCase
         
         // assert
         $response->assertSeeText('New titles');
+        $response->assertSeeText('No comment yet');
         $this->assertDatabaseHas('blog_posts', [
             'title' => 'New titles'
         ]);
