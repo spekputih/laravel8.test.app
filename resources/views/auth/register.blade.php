@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 @section('content')
     <form action="{{ route('register') }}" method="POST">
@@ -12,7 +13,7 @@
             @endif
         </div>
         <div class="form-group">
-            <label for="email" class="">email</label>
+            <label for="email" class="">Email</label>
             <input type="text" name="email" class="form-control {{ $errors->has('email') ? 'is-invalid': '' }}" required value="{{ old('email') }}">
             @if ($errors->has('email'))
                 <span class="invalid-feedback">
