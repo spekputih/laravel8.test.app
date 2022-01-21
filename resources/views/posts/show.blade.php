@@ -9,7 +9,9 @@
  @if (now()->diffInMinutes($post->created_at) <5)
     <span class="badge badge-success">New</span>
  @endif
+ <h3>Comments</h3>
  @forelse ($post->comment as $comment)
+      
       <div class="card mb-1">
          <div class="card-body">
             <h5>{{ $comment->content }}</h5>

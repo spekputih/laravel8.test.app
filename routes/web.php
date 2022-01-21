@@ -18,3 +18,5 @@ Route::resource('posts', BlogController::class)
     ->only(['index', 'show', 'create', 'store', 'edit', 'update', 'destroy']);
 
 
+Auth::routes();
+
