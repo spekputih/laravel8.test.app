@@ -10,6 +10,9 @@ use app\Models\Comment;
 
 class PostTest extends TestCase
 {
+    // This line is to provides a way to authenticate a given user as a current user.
+    // $this->actingAs($this->user()); 
+
     use RefreshDatabase;
     public function test_no_blog_posts_when_nothing_in_database()
     {
@@ -48,10 +51,15 @@ class PostTest extends TestCase
             'title' => 'Valid title',
             'content' => 'At least 10 characters'
         ];
+
         // action: send the params to the /posts route
         // use assertStatus to check whether the response has successfull redirect action
         // use assertSessionHas to identify whether the response has 'status' parameters in it 
-        $this->post('/posts', $params)->assertStatus(302)->assertSessionHas('status');
+        $this
+        ->actingAs($this->user())
+        ->post('/posts', $params)
+        ->assertStatus(302)
+        ->assertSessionHas('status');
 
         // use assertEquals to validate that the 'status' possess in the session has the same value as expected
         $this->assertEquals(session('status'), 'The post has been created!');
@@ -67,7 +75,7 @@ class PostTest extends TestCase
         // action: send the params to the /posts route
         // use assertStatus to check whether the response has successfull redirect action
         // use assertSessionHas to identify whether the response has 'status' parameters in it 
-        $this->post('/posts', $params)->assertStatus(302)->assertSessionHas('errors');
+        $this->actingAs($this->user())->post('/posts', $params)->assertStatus(302)->assertSessionHas('errors');
 
         // store the errors message in the $message variable
         $message = session('errors')->getMessages();
@@ -93,7 +101,7 @@ class PostTest extends TestCase
         ];
 
         // update action
-        $this->put("/posts/{$post->id}", $params)->assertStatus(302)->assertSessionHas('status');
+        $this->actingAs($this->user())->put("/posts/{$post->id}", $params)->assertStatus(302)->assertSessionHas('status');
         $this->assertEquals(session('status'), 'Blog Post has been Updated!');
         $this->assertDatabaseMissing('blog_posts', $post->toArray());
         $this->assertDatabaseHas('blog_posts', [
@@ -107,7 +115,7 @@ class PostTest extends TestCase
             'title' => 'New titles',
             'content' => 'Content of the blog post'
         ]);
-        $this->delete("/posts/{$post->id}")->assertStatus(302)->assertSessionHas('status');
+        $this->actingAs($this->user())->delete("/posts/{$post->id}")->assertStatus(302)->assertSessionHas('status');
         $this->assertEquals(session('status'), 'The post was deleted!');
     }
 
