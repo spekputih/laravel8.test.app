@@ -5,10 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Models\BlogPost;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\HomeController;
 
-Route::get('/', function (Request $request) {
-    return view('home.index');
-})->name('home.index');
+Route::get('/', [HomeController::class, 'home'])->name('home.index');
 
 Route::get('/contact', function(){
     return view('home.contact');
