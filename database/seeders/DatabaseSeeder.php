@@ -8,6 +8,9 @@ use Illuminate\Support\Str;
 use App\Models\User;
 use App\Models\BlogPost;
 use App\Models\Comment;
+use Database\Seeders\UserTableSeeder;
+use Database\Seeders\BlogPostTableSeeder;
+use Database\Seeders\CommentTableSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,33 +22,25 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // \App\Models\User::factory(10)->create();
+
         // states: is a tools that laravel offer to create your own information other than what faker has offer you.
         // so that you can specify you own user or data.
         // Example: suspended() is a states method defined in userFactory file
         // $users = User::factory()->count(5)->suspended()->make();
 
-        $afiq_syazwan = User::factory()->user_default()->create();
-        $else = User::factory()->count(50)->create();
-        // dd(get_class($afiq_syazwan), get_class($else));
-        $users = $else->concat([$afiq_syazwan]);
-        // dd($users->count());
+        if($this->command->confirm('Do you want to refresh the database?')){
+            $this->command->call('migrate:refresh');
+            $this->command->info('The database has been refreshed!');
+        }
 
-        // 1. get the 'posts' collection by making the model instance using make()
-        // 2. adjust the each post by using each() as it accepts closure and
-        // 3. save the changes to database
-        $posts = BlogPost::factory()->count(30)->make()->each(function($post) use ($users){
-            $post->user_id = $users->random()->id;
-            $post->save();
-        });
-
-        // 1. get the 'comments' collection by making the model instance using make()
-        // 2. adjust the each post by using each() as it accepts closure and
-        // 3. save the changes to database
-        $comments = Comment::factory()->count(100)->make()->each(function($comment) use ($posts){
-            $comment->blog_post_id = $posts->random()->id;
-            $comment->save();
-        });
-
+        //  Using the 'call([])' method allows you to break up your database seeding into multiple files 
+        //  so that no single seeder class becomes too large
+        //  The order of the seeder file is important as it is to determine which table need to be seed first
+        $this->call([
+            UserTableSeeder::class,
+            BlogPostTableSeeder::class,
+            CommentTableSeeder::class
+        ]);
 
     }
 }
