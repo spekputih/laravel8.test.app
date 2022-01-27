@@ -12,11 +12,9 @@ return [
     | the usual Laravel view path has already been registered for you.
     |
     */
-
     'paths' => [
         resource_path('views'),
     ],
-
     /*
     |--------------------------------------------------------------------------
     | Compiled View Path
