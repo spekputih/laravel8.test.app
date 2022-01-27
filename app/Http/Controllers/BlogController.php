@@ -16,7 +16,7 @@ class BlogController extends Controller
     public function index()
     {
         return view('posts.index', [
-            'posts' => BlogPost::withCount('comment')->get()
+            'posts' => BlogPost::with('user')->withCount('comment')->get()
         ]);
     }
 
@@ -46,7 +46,7 @@ class BlogController extends Controller
     
     public function show($id)
     {
-        return view('posts.show', ['post' => BlogPost::with('comment')->findOrFail($id)]);
+        return view('posts.show', ['post' => BlogPost::with('comment', 'user')->findOrFail($id)]);
     }
 
     
