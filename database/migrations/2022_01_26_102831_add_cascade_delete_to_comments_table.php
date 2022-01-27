@@ -16,9 +16,10 @@ class AddCascadeDeleteToCommentsTable extends Migration
         Schema::table('comments', function (Blueprint $table) {
             
             //  Deleting related model using cascading
-            $table->dropForeign(['blog_post_id']);
+            if(env('DB_CONNECTION') !== 'sqlite_testing'){
+                $table->dropForeign(['blog_post_id']);
+            }
             $table->foreign('blog_post_id')->references('id')->on('blog_posts')->onDelete('cascade');
-
 
         });
     }
@@ -31,7 +32,9 @@ class AddCascadeDeleteToCommentsTable extends Migration
     public function down()
     {
         Schema::table('comments', function (Blueprint $table) {
-            $table->dropForeign(['blog_post_id']);
+            if(env('DB_CONNECTION') !== 'sqlite_testing'){
+                $table->dropForeign(['blog_post_id']);
+            }
             $table->foreign('blog_post_id')->references('id')->on('blog_posts');
         });
     }

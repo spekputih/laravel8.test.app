@@ -117,6 +117,10 @@ class PostTest extends TestCase
         ]);
         $this->actingAs($this->user())->delete("/posts/{$post->id}")->assertStatus(302)->assertSessionHas('status');
         $this->assertEquals(session('status'), 'The post was deleted!');
+        $this->assertSoftDeleted('blog_posts', [
+            'title' => 'New titles',
+            'content' => 'Content of the blog post'
+        ]);
     }
 
     private function createDummyBlogPost(): BlogPost{
