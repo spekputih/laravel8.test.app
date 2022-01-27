@@ -52,17 +52,23 @@ class BlogController extends Controller
 
     public function edit($id)
     {
-        $data = BlogPost::findOrFail($id);
-        return view('posts.edit', ['post' => $data]);
+        
+        $post = BlogPost::findOrFail($id);
+        if (Gate::denies('update-post', $post)) {
+            abort(403, 'You cannot access this page');
+        }
+        return view('posts.edit', ['post' => $post]);
     }
 
     public function update(StorePost $request, $id)
     {
-        if (Gate::denies('update-post', $id)) {
-            abort(403);
-        }
+        
         // find the existed post model in the database
         $post = BlogPost::findOrFail($id);
+
+        if (Gate::denies('update-post', $post)) {
+            abort(403);
+        }
         // validate the blogPost 
         $validated = $request->validated();
         // store the validated request

@@ -29,8 +29,8 @@ class AuthServiceProvider extends ServiceProvider
 
 
         // Add authorization gates to update function
-        Gate::define('update-post', function(User $user, $id){
-            return $user->id === $id;
+        Gate::define('update-post', function($user, $post){
+            return $user->id === $post->user_id;
         });
     }
 }
