@@ -6,6 +6,7 @@ use App\Models\BlogPost;
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePost;
 // use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class BlogController extends Controller
 {
@@ -49,7 +50,6 @@ class BlogController extends Controller
         return view('posts.show', ['post' => BlogPost::with('comment', 'user')->findOrFail($id)]);
     }
 
-    
     public function edit($id)
     {
         $data = BlogPost::findOrFail($id);
@@ -58,6 +58,9 @@ class BlogController extends Controller
 
     public function update(StorePost $request, $id)
     {
+        if (Gate::denies('update-post', $id)) {
+            abort(403);
+        }
         // find the existed post model in the database
         $post = BlogPost::findOrFail($id);
         // validate the blogPost 
