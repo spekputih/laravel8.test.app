@@ -85,8 +85,11 @@ class PostTest extends TestCase
         $this->assertEquals($message['content'][0], 'The content must be at least 5 characters.');
     }
     public function testUpdateValid(){
+        $user = $this->user();
+        // dd($user);
+
         // create new post as a reference for update action after this.
-        $post = $this->createDummyBlogPost();
+        $post = $this->createDummyBlogPost($user->id);
         
         // check if the insertion into database successfull
         $this->assertDatabaseHas('blog_posts', [
@@ -101,7 +104,7 @@ class PostTest extends TestCase
         ];
 
         // update action
-        $this->actingAs($this->user())->put("/posts/{$post->id}", $params)->assertStatus(302)->assertSessionHas('status');
+        $this->actingAs($user)->put("/posts/{$post->id}", $params)->assertStatus(302)->assertSessionHas('status');
         $this->assertEquals(session('status'), 'Blog Post has been Updated!');
         $this->assertDatabaseMissing('blog_posts', $post->toArray());
         $this->assertDatabaseHas('blog_posts', [
@@ -110,12 +113,13 @@ class PostTest extends TestCase
     }
 
     public function testDelete(){
-        $post = $this->createDummyBlogPost();
+        $user = $this->user();
+        $post = $this->createDummyBlogPost($user->id);
         $this->assertDatabaseHas('blog_posts', [
             'title' => 'New titles',
             'content' => 'Content of the blog post'
         ]);
-        $this->actingAs($this->user())->delete("/posts/{$post->id}")->assertStatus(302)->assertSessionHas('status');
+        $this->actingAs($user)->delete("/posts/{$post->id}")->assertStatus(302)->assertSessionHas('status');
         $this->assertEquals(session('status'), 'The post was deleted!');
         $this->assertSoftDeleted('blog_posts', [
             'title' => 'New titles',
@@ -123,13 +127,15 @@ class PostTest extends TestCase
         ]);
     }
 
-    private function createDummyBlogPost(): BlogPost{
+    private function createDummyBlogPost($userId = null): BlogPost{
         // $post = new BlogPost();
         // $post->title = 'New titles';
         // $post->content = 'Content of the blog post';
         // $post->save();
         // return $post;
-        return BlogPost::factory()->newPost()->create();
+        return BlogPost::factory()->newPost()->create([
+            'user_id' => $userId ?? $this->user()->id,
+        ]);
     }
 
 

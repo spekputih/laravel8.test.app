@@ -11,7 +11,7 @@ abstract class TestCase extends BaseTestCase
 
 
     // user(): create user instance for authentication purposes.
-    protected function user(){
+    public function user(){
         return User::factory()->create();
     }
 }

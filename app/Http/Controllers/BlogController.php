@@ -33,6 +33,7 @@ class BlogController extends Controller
     {
         // validate the data received 
         $validated = $request->validated();
+        $validated['user_id'] = $request->user()->id;
         // call BlogPost class to access its database
         $blog = new BlogPost();
         // insert the validated data to the blog instance 
@@ -55,7 +56,7 @@ class BlogController extends Controller
         
         $post = BlogPost::findOrFail($id);
         
-        $this->authorize('update-post', $post);
+        $this->authorize('update', $post);
 
         return view('posts.edit', ['post' => $post]);
     }
@@ -72,7 +73,7 @@ class BlogController extends Controller
         // }
 
         // helper function for Gate:
-        $this->authorize('update-post', $post);
+        $this->authorize('update', $post);
 
         // validate the blogPost 
         $validated = $request->validated();
@@ -95,7 +96,7 @@ class BlogController extends Controller
         $post = BlogPost::findOrFail($id);
 
         // prevent unauthorize user to perform this action
-        $this->authorize('delete-post', $post);
+        $this->authorize('delete', $post);
 
         // delete the post using delete() method
         $post->delete();

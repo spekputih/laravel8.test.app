@@ -26,12 +26,18 @@
                         <p>No comment yet</p>
                     @endif
                     <div class="form-inline">
-                        <a href="{{ route('posts.edit', ['post' => $post->id]) }}" class="btn btn-primary mr-1">Edit</a>
-                        <form action="{{ route('posts.destroy', ['post' => $post->id]) }}" method="post">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Delete</button>
-                        </form>
+
+                        @can('update', $post)
+                            <a href="{{ route('posts.edit', ['post' => $post->id]) }}" class="btn btn-primary mr-1">Edit</a>
+                        @endcan
+
+                        @can('delete', $post)
+                            <form action="{{ route('posts.destroy', ['post' => $post->id]) }}" method="post">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        @endcan
                     </div>
                 </div>
             </div>
