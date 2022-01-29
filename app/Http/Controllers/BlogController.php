@@ -54,9 +54,9 @@ class BlogController extends Controller
     {
         
         $post = BlogPost::findOrFail($id);
-        if (Gate::denies('update-post', $post)) {
-            abort(403, 'You cannot access this page');
-        }
+        
+        $this->authorize('update-post', $post);
+
         return view('posts.edit', ['post' => $post]);
     }
 
@@ -66,9 +66,14 @@ class BlogController extends Controller
         // find the existed post model in the database
         $post = BlogPost::findOrFail($id);
 
-        if (Gate::denies('update-post', $post)) {
-            abort(403);
-        }
+        // prevent access to unauthorize user to perform this function
+        // if (Gate::denies('update-post', $post)) {
+        //     abort(403);
+        // }
+
+        // helper function for Gate:
+        $this->authorize('update-post', $post);
+
         // validate the blogPost 
         $validated = $request->validated();
         // store the validated request
@@ -88,6 +93,10 @@ class BlogController extends Controller
     {
         // find the post using $id data using findOrFail method
         $post = BlogPost::findOrFail($id);
+
+        // prevent unauthorize user to perform this action
+        $this->authorize('delete-post', $post);
+
         // delete the post using delete() method
         $post->delete();
         // save message in the session
