@@ -33,13 +33,18 @@ class BlogController extends Controller
     {
         // validate the data received 
         $validated = $request->validated();
+
         $validated['user_id'] = $request->user()->id;
+
         // call BlogPost class to access its database
         $blog = new BlogPost();
+
         // insert the validated data to the blog instance 
         $blog->fill($validated);
+
         // the data then save to the database
         $blog->save();
+        
         // redirect to create view
         return redirect()->route('posts.create')->with('status', 'The post has been created!');
         // dd($request);
@@ -77,8 +82,10 @@ class BlogController extends Controller
 
         // validate the blogPost 
         $validated = $request->validated();
+
         // store the validated request
         $post->fill($validated);
+
         // save to database
         $post->save();
 
@@ -100,8 +107,10 @@ class BlogController extends Controller
 
         // delete the post using delete() method
         $post->delete();
+
         // save message in the session
         session()->flash('status', 'The post was deleted!');
+
         // return to the index of the posts
         return redirect()->route('posts.index');
     }
