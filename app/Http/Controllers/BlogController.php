@@ -44,7 +44,7 @@ class BlogController extends Controller
 
         // the data then save to the database
         $blog->save();
-        
+
         // redirect to create view
         return redirect()->route('posts.create')->with('status', 'The post has been created!');
         // dd($request);
@@ -113,5 +113,6 @@ class BlogController extends Controller
 
         // return to the index of the posts
         return redirect()->route('posts.index');
+        
     }
 }
