@@ -11,3 +11,4 @@ class LatestScope implements Scope{
         $builder->orderBy($model::CREATED_AT, 'desc');
     }
 }
+
