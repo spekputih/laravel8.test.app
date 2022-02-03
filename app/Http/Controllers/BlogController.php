@@ -17,7 +17,7 @@ class BlogController extends Controller
     public function index()
     {
         return view('posts.index', [
-            'posts' => BlogPost::with('user')->withCount('comment')->get()
+            'posts' => BlogPost::latest()->with('user')->withCount('comment')->get()
         ]);
     }
 
@@ -113,6 +113,6 @@ class BlogController extends Controller
 
         // return to the index of the posts
         return redirect()->route('posts.index');
-        
+
     }
 }
