@@ -17,7 +17,8 @@ class BlogController extends Controller
     public function index()
     {
         return view('posts.index', [
-            'posts' => BlogPost::latest()->with('user')->withCount('comment')->get()
+            'posts' => BlogPost::latest()->with('user')->withCount('comment')->get(),
+            'mostCommented' => BlogPost::mostCommented()->take(5)->get()
         ]);
     }
 
