@@ -61,6 +61,16 @@
                 <a href="#" class="btn btn-primary">Go somewhere</a>
             </div>
         </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h4 class="card-title">Most Active User</h4>
+                <hr>
+                @foreach ($mostActiveUser as $user)
+                    <h6 class="card-title text-muted">{{ $user->name }} ( {{ $user->blog_posts_count }} blog posts )</h6>
+                @endforeach
+                
+            </div>
+        </div>
     </div>
     </div>
     @else

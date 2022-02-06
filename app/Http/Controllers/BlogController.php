@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StorePost;
 // use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use App\Models\User;
 
 class BlogController extends Controller
 {
@@ -18,7 +19,8 @@ class BlogController extends Controller
     {
         return view('posts.index', [
             'posts' => BlogPost::latest()->with('user')->withCount('comment')->get(),
-            'mostCommented' => BlogPost::mostCommented()->take(5)->get()
+            'mostCommented' => BlogPost::mostCommented()->take(5)->get(),
+            'mostActiveUser' => User::mostActiveUser()->take(5)->get()
         ]);
     }
 
