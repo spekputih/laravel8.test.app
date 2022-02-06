@@ -71,6 +71,16 @@
                 
             </div>
         </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h4 class="card-title">Most Active User Last Month</h4>
+                <hr>
+                @foreach ($mostActiveUserLastMonth as $user)
+                    <h6 class="card-title text-muted">{{ $user->name }} ( {{ $user->blog_posts_count }} blog posts )</h6>
+                @endforeach
+                
+            </div>
+        </div>
     </div>
     </div>
     @else

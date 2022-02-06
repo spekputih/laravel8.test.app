@@ -50,4 +50,10 @@ class User extends Authenticatable
     public function scopeMostActiveUser(Builder $query){
         return $query->withCount('blogPosts')->orderBy('blog_posts_count', 'desc');
     }
+
+    public function scopeWithMostBlogPostLastMonth(Builder $query){
+        return $query->withCount(['blogPosts' => function (Builder $query){
+            $query->whereBetween(static::CREATED_AT, [now()->subMonth(1), now()]);
+        }])->orderBy('blog_posts_count', 'desc');
+    }
 }
