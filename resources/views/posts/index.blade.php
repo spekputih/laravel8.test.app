@@ -11,9 +11,7 @@
     </form>
     @if (count($posts))
     <div class="row">
-        <div class="col-8">
-
-        
+        <div class="col-8">        
         @foreach ($posts as $post)
             <div class="card mb-2">
                 <div class="card-body">
@@ -40,14 +38,15 @@
                         @can('update', $post)
                             <a href="{{ route('posts.edit', ['post' => $post->id]) }}" class="btn btn-primary mr-1">Edit</a>
                         @endcan
-
-                        @can('delete', $post)
-                            <form action="{{ route('posts.destroy', ['post' => $post->id]) }}" method="post">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger">Delete</button>
-                            </form>
-                        @endcan
+                        @if (!$post->trashed())
+                            @can('delete', $post)
+                                <form action="{{ route('posts.destroy', ['post' => $post->id]) }}" method="post">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            @endcan
+                        @endif
                     </div>
                 </div>
             </div>
@@ -58,11 +57,9 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">Most Commented Blog Post</h4>
-                <hr>
-               
+                <hr>               
                 @foreach ($mostCommented as $post)
-                    <h5 class="card-title"><a href="{{ route('posts.show', ['post' => $post->id]) }}">{{ $post->title }}</a></h5>
-                    
+                    <h5 class="card-title"><a href="{{ route('posts.show', ['post' => $post->id]) }}">{{ $post->title }}</a></h5>                    
                 @endforeach
                 <a href="#" class="btn btn-primary">Go somewhere</a>
             </div>
@@ -73,8 +70,7 @@
                 <hr>
                 @foreach ($mostActiveUser as $user)
                     <h6 class="card-title text-muted">{{ $user->name }} ( {{ $user->blog_posts_count }} blog posts )</h6>
-                @endforeach
-                
+                @endforeach                
             </div>
         </div>
         <div class="card mt-3">
@@ -83,8 +79,7 @@
                 <hr>
                 @foreach ($mostActiveUserLastMonth as $user)
                     <h6 class="card-title text-muted">{{ $user->name }} ( {{ $user->blog_posts_count }} blog posts )</h6>
-                @endforeach
-                
+                @endforeach                
             </div>
         </div>
     </div>

@@ -7,7 +7,9 @@
  <h4>{{ $post->content }}</h4>
  <p>Added {{ $post->created_at->diffForHumans() }}</p>
  @if (now()->diffInMinutes($post->created_at) <5)
-    <span class="badge badge-success">New</span>
+    @component('badge', ['type' => 'primary'])
+       Brand New Post!
+    @endcomponent
  @endif
 
  <h3>Comments</h3>
