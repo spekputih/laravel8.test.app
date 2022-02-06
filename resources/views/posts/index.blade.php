@@ -17,8 +17,14 @@
         @foreach ($posts as $post)
             <div class="card mb-2">
                 <div class="card-body">
-                    <h1 class="mt-2"><a
-                            href="{{ route('posts.show', ['post' => $post->id]) }}">{{ $post['title'] }}</a></h1>
+                    @if ($post->trashed())
+                        <h1 class="mt-2"><a
+                        href="{{ route('posts.show', ['post' => $post->id]) }}"><del>{{ $post['title'] }}</del></a></h1> 
+                    @else 
+                        <h1 class="mt-2"><a
+                        href="{{ route('posts.show', ['post' => $post->id]) }}">{{ $post['title'] }}</a></h1>   
+                    @endif
+                    
                     <p class="text-muted m-0">
                         Added {{ $post->created_at->diffForHumans() }}
 
