@@ -6,11 +6,9 @@
  <h1>{{ $post->title }}</h1>
  <h4>{{ $post->content }}</h4>
  <p>Added {{ $post->created_at->diffForHumans() }}</p>
- @if (now()->diffInMinutes($post->created_at) < 5)
-    @badge(['type' => 'primary'])
+    @badge(['show' => now()->diffInMinutes($post->created_at) < 5])
       Brand new post
     @endbadge
- @endif
 
  <h3>Comments</h3>
  @forelse ($post->comment as $comment)     
