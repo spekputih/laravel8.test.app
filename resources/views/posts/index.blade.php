@@ -58,25 +58,31 @@
         @endforeach()
     </div>
     <div class="col-4">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">Most Commented Blog Post</h4>
-                <hr>               
+        @card(['title' => 'Most Commented Blog Post!'])
+            @slot('style')
+            @endslot
+            @slot('subtitle')
+                Blog post that has the most comment
+            @endslot
+            @slot('list')
                 @foreach ($mostCommented as $post)
                     <h5 class="card-title"><a href="{{ route('posts.show', ['post' => $post->id]) }}">{{ $post->title }}</a></h5>                    
                 @endforeach
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
-        </div>
-        <div class="card mt-3">
-            <div class="card-body">
-                <h4 class="card-title">Most Active User</h4>
-                <hr>
+            @endslot
+        @endcard
+        @card(['title' => 'Most Active User'])
+            @slot('style')
+                mt-3
+            @endslot
+            @slot('subtitle')
+                User that has been posted a lot of blog
+            @endslot
+            @slot('list')
                 @foreach ($mostActiveUser as $user)
                     <h6 class="card-title text-muted">{{ $user->name }} ( {{ $user->blog_posts_count }} blog posts )</h6>
-                @endforeach                
-            </div>
-        </div>
+                @endforeach
+            @endslot
+        @endcard
         <div class="card mt-3">
             <div class="card-body">
                 <h4 class="card-title">Most Active User Last Month</h4>
