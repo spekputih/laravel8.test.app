@@ -24,9 +24,13 @@
                     @endif
                     
                     <p class="text-muted m-0">
-                        Added {{ $post->created_at->diffForHumans() }}
-
-                        by {{ $post->user->name }}
+                        @updated(['date' => $post->created_at, 'name' => $post->user->name])
+                        @endupdated
+                    </p>
+                    <p>
+                        @updated(['date' => $post->updated_at, 'name' => $post->user->name])
+                            Updated
+                        @endupdated
                     </p>
                     @if ($post->comment_count)
                         <p>{{ $post->comment_count }} comments</p>
