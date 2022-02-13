@@ -8,20 +8,34 @@ use App\Http\Requests\StorePost;
 // use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 
 class BlogController extends Controller
 {
     public function __construct(){
         $this->middleware('auth')->only(['create', 'store', 'update', 'destroy']);
     }
-    
+
     public function index()
     {
+
+        $mostCommented = Cache::remember("blog-post-commented", now()->addSeconds(60), function(){
+            return BlogPost::mostCommented()->take(5)->get();
+        });
+
+        $mostActiveUser = Cache::remember("users-active-user", now()->addSeconds(60), function(){
+            return User::mostActiveUser()->take(5)->get();
+        });
+
+        $mostActiveUserLastMonth = Cache::remember("users-active-user-last-month", now()->addSeconds(60), function(){
+            return User::withMostBlogPostLastMonth()->take(5)->get();
+        });
+
         return view('posts.index', [
-            'posts' => BlogPost::latest()->with('user')->withCount('comment')->get(),
-            'mostCommented' => BlogPost::mostCommented()->take(5)->get(),
-            'mostActiveUser' => User::mostActiveUser()->take(5)->get(),
-            'mostActiveUserLastMonth' => User::withMostBlogPostLastMonth()->take(5)->get()
+            'posts' => BlogPost::latest()->with('user')->withCount('comment')->take(25)->get(),
+            'mostCommented' => $mostCommented,
+            'mostActiveUser' => $mostActiveUser,
+            'mostActiveUserLastMonth' => $mostActiveUserLastMonth
         ]);
     }
 
@@ -57,7 +71,12 @@ class BlogController extends Controller
     
     public function show($id)
     {
-        return view('posts.show', ['post' => BlogPost::with('comment', 'user')->findOrFail($id)]);
+
+        $post = Cache::remember("blog-post-{$id}", 60, function() use($id) {
+            return BlogPost::with('comment', 'user')->findOrFail($id);
+        });
+
+        return view('posts.show', ['post' => $post]);
     }
 
     public function edit($id)

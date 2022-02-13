@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Scopes\DeletedAdminScope;
 use App\Scopes\LatestScope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Cache;
 
 class BlogPost extends Model
 {
@@ -39,6 +40,9 @@ class BlogPost extends Model
         parent::boot();
 
         // static::addGlobalScope(new LatestScope);
+        static::updating(function(BlogPost $blogPost){
+            Cache::forget("blog-post-{$blogPost->id}");
+        });
 
         static::deleting(function(BlogPost $blogPost){
             $blogPost->comment()->delete();
